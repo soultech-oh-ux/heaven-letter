@@ -11,7 +11,11 @@
 <section class="section"><div class="sectionhead"><span class="number">02</span><h2>경건의 글</h2></div><div class="devotion"><div class="bodytext" data-edit="" id="devotional">주님은 우리가 불의함에도 불구하고, 우리가 파멸에 이르렀을 때에 우리에게 자비를 베푸셨습니다. 주님은 우리와 온 마음으로 그분을 경배하는 모든 이에게 자비와 친절을 베푸시고자 합니다.</div><p class="author">미하엘 바이세</p></div></section>
 
 <section class="section" id="speak"><div class="sectionhead"><span class="number">03</span><h2>SPEAK</h2></div><div class="response"><b>S. SIN</b><div class="bodytext" data-edit="" id="sin">주님, 제 양심보다 더 크신 주님의 마음을 믿지 못할 때가 있습니다. 키리에 엘레이손, 저를 불쌍히 여기시고 믿음을 더하여 주옵소서.</div></div><div class="response"><b>P. PROMISE</b><div class="bodytext" data-edit="" id="promise">주님, 언제나 자비로우시고 은혜로우십니다.</div></div><div class="response"><b>E. ENCOURAGE</b><div class="bodytext" data-edit="" id="encourage">내가 너를 안다. 내가 너를 사랑한다.</div><small>말씀을 바탕으로 한 묵상 표현</small></div><div class="response"><b>A. ACTION</b><div class="bodytext" data-edit="" id="action">주의 자비와 은혜를 힘입어 담대하게 살아가겠습니다.</div></div></section>
-<section class="section" id="praise"><div class="sectionhead"><span class="number">04</span><h2>함께 찬양하며 묵상해요</h2></div><a aria-label="찬양 영상 재생 — YouTube에서 열기" class="praise-cover" href="https://youtu.be/LYSpeuUWlhM?si=xFZg7a1UeJNaeoSO" rel="noopener" target="_blank"><img alt="찬양곡 영상 썸네일" height="270" loading="lazy" src="https://i.ytimg.com/vi/LYSpeuUWlhM/hqdefault.jpg" width="480"/><span aria-hidden="true" class="play-icon">재생</span><span class="praise-label">주님과의 관계 안으로 · 함께 찬양해요</span></a><div class="actions"><a class="button" href="https://youtu.be/LYSpeuUWlhM?si=xFZg7a1UeJNaeoSO" rel="noopener" target="_blank">YouTube에서 찬양 듣기</a><button id="share">편지 링크 복사</button><button onclick="window.print()">인쇄 · PDF 저장</button></div><p id="status" role="status"></p></section>
+<section class="section" id="praise"><div class="sectionhead"><span class="number">04</span><h2>함께 찬양하며 묵상해요</h2></div><div id="praise-editor" hidden style="margin-bottom:16px">
+  <label for="praise-url">유튜브 찬양 주소</label>
+  <input id="praise-url" type="url" inputmode="url" autocomplete="off" style="display:block;width:100%;padding:10px;font-size:16px" aria-describedby="praise-url-error">
+  <p id="praise-url-error" role="alert" style="color:#a63535"></p>
+</div><a aria-label="찬양 영상 재생 — YouTube에서 열기" class="praise-cover" href="https://youtu.be/LYSpeuUWlhM?si=xFZg7a1UeJNaeoSO" rel="noopener" target="_blank"><img alt="찬양곡 영상 썸네일" height="270" loading="lazy" src="https://i.ytimg.com/vi/LYSpeuUWlhM/hqdefault.jpg" width="480"/><span aria-hidden="true" class="play-icon">재생</span><span class="praise-label">주님과의 관계 안으로 · 함께 찬양해요</span></a><div class="actions"><a class="button" href="https://youtu.be/LYSpeuUWlhM?si=xFZg7a1UeJNaeoSO" rel="noopener" target="_blank">YouTube에서 찬양 듣기</a><button id="share">편지 링크 복사</button><button onclick="window.print()">인쇄 · PDF 저장</button></div><p id="status" role="status"></p></section>
 <section class="section" id="bible"><div class="sectionhead"><span class="number">05</span><h2>오늘의 성구</h2></div><p class="version">성경 본문 · 개역한글</p>
 <div class="verse"><h3>시편 90편 8절</h3><p data-edit="" id="verse-0">주께서 우리의 죄악을 주의 앞에 놓으시며 우리의 은밀한 죄를 주의 얼굴 빛 가운데 두셨사오니</p></div><div class="verse"><h3>요한일서 3장 20절</h3><p data-edit="" id="verse-1">우리 마음이 혹 우리를 책망할 일이 있거든 하물며 우리 마음보다 크시고 모든 것을 아시는 하나님일까 보냐</p></div><div class="verse"><h3>창세기 33장 1–4절, 8–11절</h3><p data-edit="" id="verse-2">1 야곱이 눈을 들어 보니 에서가 사백인을 거느리고 오는지라 그 자식들을 나누어 레아와 라헬과 두 여종에게 맡기고
 2 여종과 그 자식들은 앞에 두고 레아와 그 자식들은 다음에 두고 라헬과 요셉은 뒤에 두고
@@ -26,7 +30,35 @@
 <dialog aria-labelledby="unlock-title" id="edit-unlock"><form id="unlock-form"><h2 id="unlock-title">글 수정 잠금 해제</h2><p>편집 암호를 입력해 주세요.</p><label for="edit-password">암호</label><input autocomplete="off" autofocus="" id="edit-password" inputmode="numeric" required="" style="display:block;width:100%;padding:12px;margin:12px 0;font-size:18px;box-sizing:border-box" type="password"/><p id="unlock-error" role="alert" style="color:#a63535"></p><button type="submit">편집 열기</button><button id="cancel-unlock" type="button">취소</button></form></dialog><dialog aria-label="완성된 편지" id="letter-preview"><div class="preview-toolbar"><b>예수묵상편지</b><button id="close-preview">닫기 · 수정으로 돌아가기</button></div><iframe id="letter-frame" sandbox="allow-popups allow-popups-to-escape-sandbox" title="완성된 묵상편지"></iframe></dialog>
 <dialog aria-labelledby="download-title" id="download-options"><h2 id="download-title">편지 저장 · 공유</h2><p>읽기만 하실 때는 ‘편지 바로 열기’를 이용하세요.</p><div class="download-buttons"><button id="save-html">HTML 파일 저장</button><button id="save-zip">ZIP으로 저장</button><button id="share-file">휴대폰 파일 공유</button><button id="copy-text">편지 내용 복사</button></div><p id="download-message" role="status"></p><p class="download-help">카카오톡에서 저장이 막히면 화면 메뉴에서 ‘다른 브라우저로 열기’를 선택하세요. 외부 브라우저에는 이 화면의 수정 내용이 자동으로 옮겨지지 않습니다. 첨부 HTML 대신 편지 링크를 보내면 다운로드 없이 읽을 수 있습니다.</p><button id="close-download">닫기</button></dialog><script>
 const fields=[...document.querySelectorAll('[data-edit]')];const key='workshop-b-nov09-v1';const originals=Object.fromEntries(fields.map(e=>[e.id,e.innerHTML]));let editing=false;const status=document.getElementById('status');try{const saved=JSON.parse(localStorage.getItem(key)||'null');if(saved)fields.forEach(e=>{if(saved[e.id]!==undefined)e.textContent=saved[e.id]})}catch(e){}
-function endEdit(){editing=false;fields.forEach(e=>e.contentEditable='false');document.getElementById('edit').hidden=false;document.getElementById('save').hidden=true;document.getElementById('reset').hidden=true}
+const praiseEditor = document.getElementById('praise-editor');
+const praiseInput = document.getElementById('praise-url');
+const praiseError = document.getElementById('praise-url-error');
+const praiseCover = document.querySelector('#praise .praise-cover');
+const praiseButton = document.querySelector('#praise .actions a');
+const praiseThumbnail = praiseCover.querySelector('img');
+const originalPraise = {url: praiseCover.href, thumbnail: praiseThumbnail.src};
+
+function parsePraiseUrl(value) {
+  const address = value.trim();
+  const direct = address.match(/^https?:\/\/(?:youtu\.be\/|(?:(?:www|m|music)\.)?youtube\.com\/(?:shorts|live|embed)\/)([A-Za-z0-9_-]{11})(?:[?#].*)?$/i);
+  const watch = address.match(/^https?:\/\/(?:(?:www|m|music)\.)?youtube\.com\/watch\?([^#]+)/i);
+  const id = direct?.[1] || watch?.[1].match(/(?:^|&)v=([A-Za-z0-9_-]{11})(?:&|$)/)?.[1];
+  if (!id) return null;
+  return {url: 'https://youtu.be/' + id, thumbnail: 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg'};
+}
+
+function showPraise(video) {
+  praiseCover.href = video.url;
+  praiseButton.href = video.url;
+  praiseThumbnail.src = video.thumbnail;
+}
+try {
+  const stored = JSON.parse(localStorage.getItem(key) || '{}')?.praiseUrl;
+  const video = typeof stored === 'string' ? parsePraiseUrl(stored) : null;
+  if (video) showPraise(video);
+} catch {}
+
+function endEdit(){praiseEditor.hidden=true;editing=false;fields.forEach(e=>e.contentEditable='false');document.getElementById('edit').hidden=false;document.getElementById('save').hidden=true;document.getElementById('reset').hidden=true}
 const unlockDialog=document.getElementById('edit-unlock'),passwordInput=document.getElementById('edit-password'),unlockError=document.getElementById('unlock-error');
 document.getElementById('edit').onclick=()=>{passwordInput.value='';unlockError.textContent='';unlockDialog.showModal();passwordInput.focus();};
 document.getElementById('cancel-unlock').onclick=()=>unlockDialog.close();
@@ -34,11 +66,28 @@ unlockDialog.addEventListener('close',()=>{passwordInput.value='';unlockError.te
 document.getElementById('unlock-form').onsubmit=e=>{
  e.preventDefault();
  if(passwordInput.value!=='332661'){unlockError.textContent='암호가 올바르지 않습니다. 다시 입력해 주세요.';passwordInput.value='';passwordInput.focus();return;}
- unlockDialog.close();editing=true;fields.forEach(e=>e.contentEditable='true');document.getElementById('edit').hidden=true;document.getElementById('save').hidden=false;document.getElementById('reset').hidden=false;fields[1].focus();
-};document.getElementById('save').onclick=()=>{try{localStorage.setItem(key,JSON.stringify(Object.fromEntries(fields.map(e=>[e.id,e.innerText]))));endEdit();status.textContent='이 기기에 저장했습니다. 수정본은 편지 파일로 내려받아 전달하세요. 링크는 게시된 원문을 엽니다.'}catch(e){status.textContent='기기 저장이 제한되어 있습니다. 편지 파일로 내려받아 보관하세요.'}};document.getElementById('reset').onclick=()=>{if(confirm('수정한 글을 지우고 원문으로 복원할까요?')){fields.forEach(e=>e.innerHTML=originals[e.id]);try{localStorage.removeItem(key)}catch(e){}endEdit()}};document.getElementById('share').onclick=async()=>{try{await navigator.clipboard.writeText(location.protocol==='file:'?'':location.origin+'/');status.textContent='게시된 원문 링크를 복사했습니다. 원하시는 분에게 전달하세요.'}catch(e){status.textContent='이 주소를 복사하세요: '+location.href}};function buildLetter(){
+ unlockDialog.close();
+ praiseInput.value = praiseCover.href;
+ praiseError.textContent = '';
+ praiseInput.removeAttribute('aria-invalid');
+ praiseEditor.hidden = false;
+ editing=true;fields.forEach(e=>e.contentEditable='true');document.getElementById('edit').hidden=true;document.getElementById('save').hidden=false;document.getElementById('reset').hidden=false;fields[1].focus();
+};document.getElementById('save').onclick = () => {
+ const video = parsePraiseUrl(praiseInput.value);
+ if (!video) {
+   praiseError.textContent = '유튜브 동영상 주소를 입력해 주세요.';
+   praiseInput.setAttribute('aria-invalid', 'true');
+   praiseInput.focus();
+   return;
+ }
+ showPraise(video);
+ const changes = Object.fromEntries(fields.map(field => [field.id, field.innerText]));
+ changes.praiseUrl = video.url;
+ try {
+   localStorage.setItem(key, JSON.stringify(changes));endEdit();status.textContent='이 기기에 저장했습니다. 수정본은 편지 파일로 내려받아 전달하세요. 링크는 게시된 원문을 엽니다.'}catch(e){status.textContent='기기 저장이 제한되어 있습니다. 편지 파일로 내려받아 보관하세요.'}};document.getElementById('reset').onclick=()=>{if(confirm('수정한 글을 지우고 원문으로 복원할까요?')){fields.forEach(e=>e.innerHTML=originals[e.id]);showPraise(originalPraise);try{localStorage.removeItem(key)}catch(e){}endEdit()}};document.getElementById('share').onclick=async()=>{try{await navigator.clipboard.writeText(location.protocol==='file:'?'':location.origin+'/');status.textContent='게시된 원문 링크를 복사했습니다. 원하시는 분에게 전달하세요.'}catch(e){status.textContent='이 주소를 복사하세요: '+location.href}};function buildLetter(){
  const copy=document.documentElement.cloneNode(true);
  copy.querySelectorAll('[data-edit]').forEach(e=>e.setAttribute('contenteditable','false'));
- copy.querySelectorAll('script,.editbar,#status,dialog').forEach(e=>e.remove());
+ copy.querySelectorAll('script,.editbar,#status,dialog,#praise-editor').forEach(e=>e.remove());
  copy.querySelectorAll('.actions button').forEach(e=>e.remove());
  const title=document.getElementById('titleText').innerText.trim().replace(/\s+/g,' ');
  copy.querySelector('title').textContent='예수묵상편지 | '+title;
