@@ -114,7 +114,7 @@ document.getElementById('unlock-form').onsubmit=e=>{
   const title=(letter.fields.titleText||'예수 묵상 편지').trim().slice(0,90);
   const desc=(letter.fields.coverMessage||letter.fields.meditation||'오늘의 예수 묵상 편지').trim().replace(/\s+/g,' ').slice(0,140);
   const payload=await packLetter(letter);
-  const url='https://heaven-letter-one.vercel.app/api/share?title='+encodeURIComponent(title)+'&desc='+encodeURIComponent(desc)+'#letter='+payload;
+  const url='https://heaven-letter-one.vercel.app/api/share?title='+encodeURIComponent(title)+'&desc='+encodeURIComponent(desc)+'&v='+encodeURIComponent(payload.slice(0,24))+'#letter='+payload;
   if(url.length>14000){status.textContent='본문이 길어 링크 공유 한도를 초과했습니다. HTML 파일로 공유해 주세요.';return}
   await navigator.clipboard.writeText(url);
   status.textContent='수정한 제목·본문·성구·찬양이 포함된 카카오톡 공유 링크를 복사했습니다. 카카오톡에 붙여 넣으세요.';
