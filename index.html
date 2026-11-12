@@ -36,7 +36,17 @@
 6 이 첫째 부활에 참여하는 자들은 복이 있고 거룩하도다 둘째 사망이 그들을 다스리는 권세가 없고 도리어 그들이 하나님과 그리스도의 제사장이 되어 천 년 동안 그리스도와 더불어 왕 노릇 하리라</p></div></section></main><footer>주님과 함께 걷는 묵상의 시간 · 묵상편지공방</footer><div class="editbar"><span>내 기기에서 글을 수정할 수 있습니다.</span><button id="edit">글 수정</button><button hidden="" id="save">수정 저장</button><button id="preview-letter">편지 바로 열기</button><button id="export">파일 저장</button><button hidden="" id="reset">원문으로 복원</button></div>
 <dialog aria-labelledby="unlock-title" id="edit-unlock"><form id="unlock-form"><h2 id="unlock-title">글 수정 잠금 해제</h2><p>편집 암호를 입력해 주세요.</p><label for="edit-password">암호</label><input autocomplete="off" autofocus="" id="edit-password" inputmode="numeric" required="" style="display:block;width:100%;padding:12px;margin:12px 0;font-size:18px;box-sizing:border-box" type="password"/><p id="unlock-error" role="alert" style="color:#a63535"></p><button type="submit">편집 열기</button><button id="cancel-unlock" type="button">취소</button></form></dialog><dialog aria-label="완성된 편지" id="letter-preview"><div class="preview-toolbar"><b>예수묵상편지</b><button id="close-preview">닫기 · 수정으로 돌아가기</button></div><iframe id="letter-frame" sandbox="allow-popups allow-popups-to-escape-sandbox" title="완성된 묵상편지"></iframe></dialog>
 <dialog aria-labelledby="download-title" id="download-options"><h2 id="download-title">편지 저장 · 공유</h2><p>읽기만 하실 때는 ‘편지 바로 열기’를 이용하세요.</p><div class="download-buttons"><button id="save-html">HTML 파일 저장</button><button id="save-zip">ZIP으로 저장</button><button id="share-file">휴대폰 파일 공유</button><button id="copy-text">편지 내용 복사</button></div><p id="download-message" role="status"></p><p class="download-help">카카오톡에서 저장이 막히면 화면 메뉴에서 ‘다른 브라우저로 열기’를 선택하세요. 외부 브라우저에는 이 화면의 수정 내용이 자동으로 옮겨지지 않습니다. 첨부 HTML 대신 편지 링크를 보내면 다운로드 없이 읽을 수 있습니다.</p><button id="close-download">닫기</button></dialog><script>
-const fields=[...document.querySelectorAll('[data-edit]')];const key='heaven-letter-peace-nov13-v1';document.getElementById('titleText').addEventListener('input',()=>{if(editing)document.getElementById('coverTitle').textContent=document.getElementById('titleText').innerText;});document.getElementById('coverTitle').addEventListener('input',()=>{if(editing)document.getElementById('titleText').textContent=document.getElementById('coverTitle').innerText;});const originals=Object.fromEntries(fields.map(e=>[e.id,e.innerHTML]));let editing=false;const status=document.getElementById('status');try{const saved=JSON.parse(localStorage.getItem(key)||'null');if(saved)fields.forEach(e=>{if(saved[e.id]!==undefined)e.textContent=saved[e.id]})}catch(e){}
+const fields=[...document.querySelectorAll('[data-edit]')];const key='heaven-letter-peace-nov13-v1';document.getElementById('titleText').addEventListener('input',()=>{if(editing)document.getElementById('coverTitle').textContent=document.getElementById('titleText').innerText;});document.getElementById('coverTitle').addEventListener('input',()=>{if(editing)document.getElementById('titleText').textContent=document.getElementById('coverTitle').innerText;});const originals=Object.fromEntries(fields.map(e=>[e.id,e.innerHTML]));
+// Shared letters carry their contents in the URL fragment, so recipients see the
+// author's edits without relying on the sender's private localStorage.
+const sharedMode=location.hash.startsWith('#letter=');
+function encodeBase64Url(bytes){let str='';for(let i=0;i<bytes.length;i+=8192)str+=String.fromCharCode(...bytes.subarray(i,i+8192));return btoa(str).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function decodeBase64Url(value){const str=atob(value.replace(/-/g,'+').replace(/_/g,'/'));return Uint8Array.from(str,c=>c.charCodeAt(0))}
+async function packLetter(value){const bytes=new TextEncoder().encode(JSON.stringify(value));if(typeof CompressionStream==='undefined')throw Error('이 브라우저에서는 공유 링크 압축을 지원하지 않습니다. 최신 Chrome 또는 Safari를 이용해 주세요.');const stream=new Blob([bytes]).stream().pipeThrough(new CompressionStream('gzip'));return encodeBase64Url(new Uint8Array(await new Response(stream).arrayBuffer()))}
+async function unpackLetter(value){const bytes=decodeBase64Url(value);const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));return JSON.parse(await new Response(stream).text())}
+function currentLetter(){return {fields:Object.fromEntries(fields.map(field=>[field.id,field.innerText])),praiseUrl:praiseCover.href}}
+function applyLetter(data){if(!data||!data.fields||typeof data.fields!=='object')throw Error('공유 편지 형식이 올바르지 않습니다.');fields.forEach(field=>{if(typeof data.fields[field.id]==='string')field.textContent=data.fields[field.id].slice(0,30000)});const video=typeof data.praiseUrl==='string'?parsePraiseUrl(data.praiseUrl):null;if(video)showPraise(video);updateSpeakVisibility(document)}
+let editing=false;const status=document.getElementById('status');if(!sharedMode){try{const saved=JSON.parse(localStorage.getItem(key)||'null');if(saved)fields.forEach(e=>{if(saved[e.id]!==undefined)e.textContent=saved[e.id]})}catch(e){}}
 const praiseEditor = document.getElementById('praise-editor');
 const praiseInput = document.getElementById('praise-url');
 const praiseError = document.getElementById('praise-url-error');
@@ -70,7 +80,7 @@ function updateSpeakVisibility(root, editingMode = false) {
     response.hidden = !editingMode && !response.querySelector('[data-edit]').textContent.trim();
   });
 }
-updateSpeakVisibility(document);
+updateSpeakVisibility(document);if(sharedMode){unpackLetter(location.hash.slice(8)).then(applyLetter).then(()=>{document.querySelector('.editbar').hidden=true;status.textContent='공유된 묵상 편지를 보고 있습니다.'}).catch(()=>{status.textContent='공유 링크를 읽지 못했습니다. 새 링크를 요청해 주세요.'})}
 
 function endEdit(){praiseEditor.hidden=true;editing=false;updateSpeakVisibility(document);fields.forEach(e=>e.contentEditable='false');document.getElementById('edit').hidden=false;document.getElementById('save').hidden=true;document.getElementById('reset').hidden=true}
 const unlockDialog=document.getElementById('edit-unlock'),passwordInput=document.getElementById('edit-password'),unlockError=document.getElementById('unlock-error');
@@ -98,7 +108,19 @@ document.getElementById('unlock-form').onsubmit=e=>{
  const changes = Object.fromEntries(fields.map(field => [field.id, field.innerText]));
  changes.praiseUrl = video.url;
  try {
-   localStorage.setItem(key, JSON.stringify(changes));endEdit();status.textContent='이 기기에 저장했습니다. 수정본은 편지 파일로 내려받아 전달하세요. 링크는 게시된 원문을 엽니다.'}catch(e){status.textContent='기기 저장이 제한되어 있습니다. 편지 파일로 내려받아 보관하세요.'}};document.getElementById('reset').onclick=()=>{if(confirm('수정한 글을 지우고 원문으로 복원할까요?')){fields.forEach(e=>e.innerHTML=originals[e.id]);showPraise(originalPraise);try{localStorage.removeItem(key)}catch(e){}endEdit()}};document.getElementById('share').onclick=async()=>{const title=document.getElementById('titleText').innerText.trim().replace(/\s+/g,' ').slice(0,90)||'예수 묵상 편지';const url='https://heaven-letter-one.vercel.app/share-peace-20261113.html';try{await navigator.clipboard.writeText(url);status.textContent='이번 묵상의 카카오톡 공유 링크를 복사했습니다. 주의: 브라우저에만 저장한 본문 수정은 게시되지 않습니다.'}catch(e){status.textContent='이 주소를 복사하세요: '+url}};function buildLetter(){
+   localStorage.setItem(key, JSON.stringify(changes));endEdit();status.textContent='이 기기에 저장했습니다. 수정본은 편지 파일로 내려받아 전달하세요. 링크는 게시된 원문을 엽니다.'}catch(e){status.textContent='기기 저장이 제한되어 있습니다. 편지 파일로 내려받아 보관하세요.'}};document.getElementById('reset').onclick=()=>{if(confirm('수정한 글을 지우고 원문으로 복원할까요?')){fields.forEach(e=>e.innerHTML=originals[e.id]);showPraise(originalPraise);try{localStorage.removeItem(key)}catch(e){}endEdit()}};document.getElementById('share').onclick=async()=>{
+ try{
+  const letter=currentLetter();
+  const title=(letter.fields.titleText||'예수 묵상 편지').trim().slice(0,90);
+  const desc=(letter.fields.coverMessage||letter.fields.meditation||'오늘의 예수 묵상 편지').trim().replace(/\s+/g,' ').slice(0,140);
+  const payload=await packLetter(letter);
+  const url='https://heaven-letter-one.vercel.app/api/share?title='+encodeURIComponent(title)+'&desc='+encodeURIComponent(desc)+'#letter='+payload;
+  if(url.length>14000){status.textContent='본문이 길어 링크 공유 한도를 초과했습니다. HTML 파일로 공유해 주세요.';return}
+  await navigator.clipboard.writeText(url);
+  status.textContent='수정한 제목·본문·성구·찬양이 포함된 카카오톡 공유 링크를 복사했습니다. 카카오톡에 붙여 넣으세요.';
+ }catch(e){status.textContent='링크 복사에 실패했습니다: '+e.message}
+};
+function buildLetter(){
  const copy=document.documentElement.cloneNode(true);
  updateSpeakVisibility(copy);
  copy.querySelectorAll('[data-edit]').forEach(e=>e.setAttribute('contenteditable','false'));
