@@ -5,12 +5,13 @@ module.exports = function handler(req, res) {
   const title = String(raw || '예수 묵상 편지').trim().slice(0, 90) || '예수 묵상 편지';
   const description = String(Array.isArray(req.query.desc) ? req.query.desc[0] : (req.query.desc || '오늘의 예수 묵상 편지를 읽어 보세요.')).trim().slice(0, 160);
   const escapeHtml = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const site = 'https://heaven-letter-one.vercel.app/';
+  const site = 'https://heaven-letter-nov09.vercel.app/';
   const image = site + 'letter-share-default.png';
+  const version = String(Array.isArray(req.query.v) ? req.query.v[0] : (req.query.v || '')).replace(/[^a-zA-Z0-9_-]/g,'').slice(0,64);
   const safe = escapeHtml(title);
   const safeDesc = escapeHtml(description);
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=60');
+  res.setHeader('Cache-Control', 'no-store, max-age=0');
   res.status(200).send(`<!doctype html><html lang="ko"><head><meta charset="utf-8">
 <title>${safe} | 예수 묵상 편지</title>
 <meta name="description" content="${safeDesc}">
@@ -18,7 +19,7 @@ module.exports = function handler(req, res) {
 <meta property="og:title" content="${safe}">
 <meta property="og:description" content="${safeDesc}">
 <meta property="og:image" content="${image}">
-<meta property="og:url" content="${site}api/share?title=${encodeURIComponent(title)}&desc=${encodeURIComponent(description)}">
+<meta property="og:url" content="${site}api/share?title=${encodeURIComponent(title)}&desc=${encodeURIComponent(description)}&v=${encodeURIComponent(version)}">
 <meta name="twitter:card" content="summary_large_image">
 
 <script>location.replace(${JSON.stringify(site)}+location.hash)</script></head><body>
