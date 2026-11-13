@@ -13,7 +13,7 @@ module.exports=async function(req,res){
  if(!letter||!letter.fields||typeof letter.fields!=='object')return res.status(400).json({error:'편지 형식 오류'});
  const fields={};
  for(const [k,v] of Object.entries(letter.fields)){if(typeof v==='string'&&k.length<80)fields[k]=v.slice(0,30000);}
- const payload={fields,date:/^\\d{4}-\\d{2}-\\d{2}$/.test(letter.date||'')?letter.date:'',praiseUrl:String(letter.praiseUrl||'').slice(0,500),updatedAt:new Date().toISOString()};
+ const payload={fields,date:/^\d{4}-\d{2}-\d{2}$/.test(letter.date||'')?letter.date:'',praiseUrl:String(letter.praiseUrl||'').slice(0,500),updatedAt:new Date().toISOString()};
  if(JSON.stringify(payload).length>90000)return res.status(413).json({error:'편지 내용이 너무 깁니다.'});
  try{await write(payload);return res.status(200).json({ok:true});}
  catch(e){return res.status(503).json({error:'서버 저장에 실패했습니다. 저장소 설정을 확인하세요.'});}
