@@ -1,11 +1,8 @@
-const {read}=require('./_storage');
+// 공유 미리보기(OG): 편지별 제목·날짜를 넣지 않고 고정 브랜드 정보만 노출한다.
 const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 module.exports=async function(req,res){
- let letter=null;try{letter=await read();}catch(e){}
- const fields=letter?.fields||{};
- const date=letter?.date?Number(letter.date.slice(5,7))+'월 '+Number(letter.date.slice(8,10))+'일 · ':'';
- const title=(date+(fields.titleText||'예수묵상편지')).slice(0,110);
- const description=(fields.coverMessage||fields.meditation||'예수 묵상 편지').replace(/\s+/g,' ').slice(0,150);
+ const title='예수 묵상편지';
+ const description='말씀과 기도로 주님과 함께 걷는 묵상편지';
  const site='https://heaven-letter-nov09.vercel.app/';
  res.setHeader('Content-Type','text/html; charset=utf-8');
  res.setHeader('Cache-Control','no-store, max-age=0');
