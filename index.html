@@ -132,7 +132,13 @@ document.getElementById('save-share').onclick = async () => {
   try{ await navigator.clipboard.writeText(url); status.textContent='저장·공유 반영 완료 · 짧은 링크를 복사했습니다 → '+url; }
   catch{ status.textContent='저장·공유 반영 완료. 이 주소를 복사하세요: '+url; }
  }
-};document.getElementById('reset').onclick=()=>{if(confirm('수정한 글을 지우고 원문으로 복원할까요?')){fields.forEach(e=>e.innerHTML=originals[e.id]);showPraise(originalPraise);try{localStorage.removeItem(key)}catch(e){}endEdit()}};document.getElementById('publish-server').onclick=async()=>{const password=prompt('B 게시 암호를 입력하세요');if(!password)return;const letter={fields:Object.fromEntries(fields.map(e=>[e.id,e.innerText])),date:dateInput.value,praiseUrl:praiseCover.href};try{const r=await fetch('/api/publish',{method:'POST',headers:{'Content-Type':'application/json','x-publish-password':password},body:JSON.stringify(letter)});const d=await r.json();if(!r.ok)throw Error(d.error||'게시 실패');status.textContent='B 서버에 게시되었습니다.'}catch(e){status.textContent='게시 실패: '+e.message}};document.getElementById('copy-fixed').onclick=async()=>{await navigator.clipboard.writeText(location.origin+'/api/letter');status.textContent='B 고정 공유 링크를 복사했습니다.'};document.getElementById('share').onclick = async () => {
+};
+// 편집 중 제목 등 내용이 바뀔 때마다 이 기기에 자동 저장(초안) — 공유 링크 반영은 버튼으로
+let _autosaveTimer;
+function autosaveDraft(){ if(!editing) return; try{ const ch=Object.fromEntries(fields.map(f=>[f.id,f.innerText])); ch.praiseUrl=praiseCover.href; ch.date=dateInput.value; localStorage.setItem(key,JSON.stringify(ch)); status.textContent='자동 저장됨 (이 기기)'; }catch(e){} }
+fields.forEach(f=>f.addEventListener('input',()=>{ clearTimeout(_autosaveTimer); _autosaveTimer=setTimeout(autosaveDraft,800); }));
+dateInput.addEventListener('change',autosaveDraft);
+document.getElementById('reset').onclick=()=>{if(confirm('수정한 글을 지우고 원문으로 복원할까요?')){fields.forEach(e=>e.innerHTML=originals[e.id]);showPraise(originalPraise);try{localStorage.removeItem(key)}catch(e){}endEdit()}};document.getElementById('publish-server').onclick=async()=>{const password=prompt('B 게시 암호를 입력하세요');if(!password)return;const letter={fields:Object.fromEntries(fields.map(e=>[e.id,e.innerText])),date:dateInput.value,praiseUrl:praiseCover.href};try{const r=await fetch('/api/publish',{method:'POST',headers:{'Content-Type':'application/json','x-publish-password':password},body:JSON.stringify(letter)});const d=await r.json();if(!r.ok)throw Error(d.error||'게시 실패');status.textContent='B 서버에 게시되었습니다.'}catch(e){status.textContent='게시 실패: '+e.message}};document.getElementById('copy-fixed').onclick=async()=>{await navigator.clipboard.writeText(location.origin+'/api/letter');status.textContent='B 고정 공유 링크를 복사했습니다.'};document.getElementById('share').onclick = async () => {
  const url=location.origin+'/l';
  try {
   await navigator.clipboard.writeText(url);
