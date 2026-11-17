@@ -122,10 +122,10 @@ document.getElementById('unlock-form').onsubmit=e=>{
    status.textContent='이 기기에는 저장했지만 공유 링크 반영은 실패했습니다: '+e.message;
  }
 };document.getElementById('reset').onclick=()=>{if(confirm('수정한 글을 지우고 원문으로 복원할까요?')){fields.forEach(e=>e.innerHTML=originals[e.id]);showPraise(originalPraise);try{localStorage.removeItem(key)}catch(e){}endEdit()}};document.getElementById('publish-server').onclick=async()=>{const password=prompt('B 게시 암호를 입력하세요');if(!password)return;const letter={fields:Object.fromEntries(fields.map(e=>[e.id,e.innerText])),date:dateInput.value,praiseUrl:praiseCover.href};try{const r=await fetch('/api/publish',{method:'POST',headers:{'Content-Type':'application/json','x-publish-password':password},body:JSON.stringify(letter)});const d=await r.json();if(!r.ok)throw Error(d.error||'게시 실패');status.textContent='B 서버에 게시되었습니다.'}catch(e){status.textContent='게시 실패: '+e.message}};document.getElementById('copy-fixed').onclick=async()=>{await navigator.clipboard.writeText(location.origin+'/api/letter');status.textContent='B 고정 공유 링크를 복사했습니다.'};document.getElementById('share').onclick = async () => {
- const url=location.origin+'/api/letter?v='+Date.now();
+ const url=location.origin+'/l';
  try {
   await navigator.clipboard.writeText(url);
-  status.textContent = '짧은 공유 링크를 복사했습니다. 카카오톡에 붙여넣으면 썸네일과 함께 표시됩니다. (먼저 저장해야 최신 편지가 반영됩니다)';
+  status.textContent = '짧은 공유 링크를 복사했습니다. 카카오톡에 붙여넣으면 썸네일과 함께 표시됩니다.';
  } catch {
   status.textContent = '이 주소를 복사하세요: ' + url;
  }
