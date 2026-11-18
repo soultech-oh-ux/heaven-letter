@@ -5,7 +5,7 @@ module.exports = function handler(req, res) {
   const title = String(raw || '예수 묵상 편지').trim().slice(0, 90) || '예수 묵상 편지';
   const description = String(Array.isArray(req.query.desc) ? req.query.desc[0] : (req.query.desc || '오늘의 예수 묵상 편지를 읽어 보세요.')).trim().slice(0, 160);
   const escapeHtml = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const site = 'https://heaven-letter-nov09.vercel.app/';
+  const site = 'https://heaven-letter-one.vercel.app/';
   const image = site + 'letter-share-default.png';
   const version = String(Array.isArray(req.query.v) ? req.query.v[0] : (req.query.v || '')).replace(/[^a-zA-Z0-9_-]/g,'').slice(0,64);
   const safe = escapeHtml(title);
