@@ -80,23 +80,14 @@ function updateSpeakVisibility(root, editingMode = false) {
     response.hidden = !editingMode && !response.querySelector('[data-edit]').textContent.trim();
   });
 }
-updateSpeakVisibility(document);if(publishedMode&&!sharedMode){fetch('/api/publish'+(publishedId?'?id='+encodeURIComponent(publishedId):''),{cache:'no-store'}).then(r=>{if(!r.ok)throw Error();return r.json()}).then(d=>{if(d.letter)applyLetter(d.letter)}).catch(()=>{status.textContent='게시된 편지를 불러오지 못했습니다.'})}if(sharedMode){unpackLetter(location.hash.slice(8)).then(applyLetter).then(()=>{document.querySelector('.editbar').hidden=true;status.textContent='공유된 묵상 편지를 보고 있습니다.'}).catch(()=>{status.textContent='공유 링크를 읽지 못했습니다. 새 링크를 요청해 주세요.'})}
+updateSpeakVisibility(document);if(publishedMode&&!sharedMode){document.querySelector('main').hidden=true;fetch('/api/publish'+(publishedId?'?id='+encodeURIComponent(publishedId):''),{cache:'no-store'}).then(r=>{if(!r.ok)throw Error();return r.json()}).then(d=>{if(!d.letter)throw Error('missing letter');applyLetter(d.letter);document.querySelector('main').hidden=false}).catch(()=>{status.textContent='게시된 편지를 불러오지 못했습니다. 새로고침하거나 관리자에게 문의해 주세요.'})}if(sharedMode){unpackLetter(location.hash.slice(8)).then(applyLetter).then(()=>{document.querySelector('.editbar').hidden=true;status.textContent='공유된 묵상 편지를 보고 있습니다.'}).catch(()=>{status.textContent='공유 링크를 읽지 못했습니다. 새 링크를 요청해 주세요.'})}
 
 function endEdit(){dateEditor.hidden=true;dateEditor.style.display='none';clearDate.hidden=true;praiseEditor.hidden=true;editing=false;updateSpeakVisibility(document);fields.forEach(e=>e.contentEditable='false');document.getElementById('edit').hidden=false;document.getElementById('save').hidden=true;document.getElementById('reset').hidden=true}
 const unlockDialog=document.getElementById('edit-unlock'),passwordInput=document.getElementById('edit-password'),unlockError=document.getElementById('unlock-error');
-document.getElementById('edit').onclick=()=>{passwordInput.value='';unlockError.textContent='';unlockDialog.showModal();passwordInput.focus();};
+document.getElementById('edit').onclick=()=>{\n praiseInput.value=praiseCover.href;\n praiseError.textContent='';\n praiseInput.removeAttribute('aria-invalid');\n praiseEditor.hidden=false;\n editing=true;\n dateEditor.hidden=false;dateEditor.style.display='inline-flex';clearDate.hidden=false;\n updateSpeakVisibility(document,true);\n fields.forEach(e=>e.contentEditable='true');\n document.getElementById('edit').hidden=true;document.getElementById('save').hidden=false;document.getElementById('reset').hidden=false;\n fields[1].focus();\n};
 document.getElementById('cancel-unlock').onclick=()=>unlockDialog.close();
 unlockDialog.addEventListener('close',()=>{passwordInput.value='';unlockError.textContent='';});
-document.getElementById('unlock-form').onsubmit=e=>{
- e.preventDefault();
- if(passwordInput.value!=='332661'){unlockError.textContent='암호가 올바르지 않습니다. 다시 입력해 주세요.';passwordInput.value='';passwordInput.focus();return;}
- unlockDialog.close();
- praiseInput.value = praiseCover.href;
- praiseError.textContent = '';
- praiseInput.removeAttribute('aria-invalid');
- praiseEditor.hidden = false;
- editing=true;dateEditor.hidden=false;dateEditor.style.display='inline-flex';clearDate.hidden=false;updateSpeakVisibility(document, true);fields.forEach(e=>e.contentEditable='true');document.getElementById('edit').hidden=true;document.getElementById('save').hidden=false;document.getElementById('reset').hidden=false;fields[1].focus();
-};document.getElementById('save').onclick = () => {
+// The browser editor is a local draft tool. Server publishing remains password-protected.\ndocument.getElementById('save').onclick = () => {
  const video = parsePraiseUrl(praiseInput.value);
  if (!video) {
    praiseError.textContent = '유튜브 동영상 주소를 입력해 주세요.';
