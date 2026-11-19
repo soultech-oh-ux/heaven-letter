@@ -84,10 +84,22 @@ updateSpeakVisibility(document);if(publishedMode&&!sharedMode){document.querySel
 
 function endEdit(){dateEditor.hidden=true;dateEditor.style.display='none';clearDate.hidden=true;praiseEditor.hidden=true;editing=false;updateSpeakVisibility(document);fields.forEach(e=>e.contentEditable='false');document.getElementById('edit').hidden=false;document.getElementById('save').hidden=true;document.getElementById('reset').hidden=true}
 const unlockDialog=document.getElementById('edit-unlock'),passwordInput=document.getElementById('edit-password'),unlockError=document.getElementById('unlock-error');
-document.getElementById('edit').onclick=()=>{\n praiseInput.value=praiseCover.href;\n praiseError.textContent='';\n praiseInput.removeAttribute('aria-invalid');\n praiseEditor.hidden=false;\n editing=true;\n dateEditor.hidden=false;dateEditor.style.display='inline-flex';clearDate.hidden=false;\n updateSpeakVisibility(document,true);\n fields.forEach(e=>e.contentEditable='true');\n document.getElementById('edit').hidden=true;document.getElementById('save').hidden=false;document.getElementById('reset').hidden=false;\n fields[1].focus();\n};
+document.getElementById('edit').onclick=()=>{
+ praiseInput.value=praiseCover.href;
+ praiseError.textContent='';
+ praiseInput.removeAttribute('aria-invalid');
+ praiseEditor.hidden=false;
+ editing=true;
+ dateEditor.hidden=false;dateEditor.style.display='inline-flex';clearDate.hidden=false;
+ updateSpeakVisibility(document,true);
+ fields.forEach(e=>e.contentEditable='true');
+ document.getElementById('edit').hidden=true;document.getElementById('save').hidden=false;document.getElementById('reset').hidden=false;
+ fields[1].focus();
+};
 document.getElementById('cancel-unlock').onclick=()=>unlockDialog.close();
 unlockDialog.addEventListener('close',()=>{passwordInput.value='';unlockError.textContent='';});
-// The browser editor is a local draft tool. Server publishing remains password-protected.\ndocument.getElementById('save').onclick = () => {
+// The browser editor is a local draft tool. Server publishing remains password-protected.
+document.getElementById('save').onclick = () => {
  const video = parsePraiseUrl(praiseInput.value);
  if (!video) {
    praiseError.textContent = '유튜브 동영상 주소를 입력해 주세요.';
